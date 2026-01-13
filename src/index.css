@@ -1,0 +1,664 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* --- Premium Enterprise Palette (Refined) --- */
+
+  /* Backgrounds */
+  --erp-bg-body: #F8FAFC;
+  /* Light neutral gray */
+  --erp-bg-card: #FFFFFF;
+  /* Pure white */
+  --erp-bg-sidebar: #111827;
+  /* Dark navy */
+  --erp-bg-surface: #F1F5F9;
+  /* Very light gray for headers */
+
+  /* Brand Colors */
+  --erp-primary: #2563EB;
+  /* Blue (Primary Button) */
+  --erp-primary-hover: #1D4ED8;
+  /* Darker blue */
+  --erp-primary-subtle: #DBEAFE;
+  /* Active cell highlight */
+  --erp-primary-ring: rgba(37, 99, 235, 0.2);
+  /* Soft glow */
+
+  /* Neutrals & Text */
+  --erp-text-main: #0F172A;
+  /* Dark navy (App Name) */
+  --erp-text-secondary: #334155;
+  /* Slate gray (Labels) */
+  --erp-text-tertiary: #9CA3AF;
+  /* Light gray (Placeholder) */
+  --erp-text-subtitle: #64748B;
+  /* Muted gray */
+  --erp-text-section: #1E3A8A;
+  /* Deep blue (Section Titles) */
+  --erp-text-input: #111827;
+  /* Dark gray (Input Text) */
+  --erp-text-header: #1F2937;
+  /* Dark slate (Table Header) */
+
+  --erp-border: #E5E7EB;
+  /* Light gray */
+  --erp-divider: #F1F5F9;
+
+  /* Semantic Colors */
+  --erp-success: #059669;
+  /* Emerald Green */
+  --erp-success-bg: #D1FAE5;
+  --erp-warning: #F59E0B;
+  --erp-warning-bg: #FFFBEB;
+  --erp-error: #DC2626;
+  /* Red */
+  --erp-error-bg: #FEF2F2;
+
+  /* Dimensions */
+  --radius-xl: 16px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+
+  --header-height: 70px;
+  --sidebar-width: 260px;
+  --sidebar-width-collapsed: 80px;
+
+  /* Elevation (Soft Shadow) */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  /* Soft shadow */
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--erp-bg-body);
+  color: var(--erp-text-main);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Scrollbars --- */
+/* Custom stylish scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  /* Slate-300 */
+  border-radius: 5px;
+  border: 2px solid var(--erp-bg-body);
+  /* Creates padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+  /* Slate-400 */
+}
+
+/* Force vertical scrollbar to prevent layout shifts */
+html {
+  overflow-y: scroll;
+}
+
+/* --- Layout Utilities --- */
+.erp-table-scroll {
+  overflow: auto;
+  flex: 1;
+  width: 100%;
+  /* Ensure smooth scrolling on touch devices */
+  -webkit-overflow-scrolling: touch;
+  /* Visual cue for horizontal scroll if needed */
+  background:
+    linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+    linear-gradient(to right, rgba(255, 255, 255, 0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.erp-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.erp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--erp-bg-body);
+}
+
+.erp-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  scroll-behavior: smooth;
+}
+
+/* --- Cards --- */
+.erp-card {
+  background: var(--erp-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--erp-border);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.erp-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Hoverable card specifically for dashboards */
+.erp-stat-card {
+  background: var(--erp-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--erp-border);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: default;
+}
+
+.erp-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--erp-text-main);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 1.875rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  color: var(--erp-text-secondary);
+  line-height: 1.7;
+  /* Increased for readability */
+  font-size: 1rem;
+  /* Slightly larger base size */
+  letter-spacing: 0.01em;
+  /* Subtle spacing */
+  margin-bottom: 1rem;
+}
+
+/* --- Spacing Utilities --- */
+.space-y-6>*+* {
+  margin-top: 1.5rem;
+}
+
+.space-y-8>*+* {
+  margin-top: 2rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+/* --- Buttons (Redesigned from Request) --- */
+.erp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  /* Modern rounded feel */
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  outline: none;
+  white-space: nowrap;
+}
+
+.erp-btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary */
+.erp-btn-primary {
+  background-color: var(--erp-primary);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.erp-btn-primary:hover {
+  background-color: var(--erp-primary-hover);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Secondary (Outline/White) */
+.erp-btn-secondary {
+  background-color: white;
+  border-color: var(--erp-border);
+  color: var(--erp-text-main);
+  box-shadow: var(--shadow-xs);
+}
+
+.erp-btn-secondary:hover {
+  background-color: var(--erp-bg-surface);
+  border-color: var(--erp-primary);
+  color: var(--erp-primary);
+}
+
+/* Danger */
+.erp-btn-danger {
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+.erp-btn-danger:hover {
+  background-color: #DC2626;
+  color: white;
+  border-color: #DC2626;
+}
+
+/* Icon Button (Circle) */
+.erp-btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--erp-text-secondary);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.erp-btn-icon:hover {
+  background-color: var(--erp-bg-surface);
+  color: var(--erp-primary);
+  border-color: var(--erp-border);
+}
+
+.erp-btn-icon.danger:hover {
+  background-color: var(--erp-error-bg);
+  color: var(--erp-error);
+  border-color: #FECACA;
+}
+
+/* Link Button */
+.erp-btn-link {
+  background: none;
+  border: none;
+  color: var(--erp-primary);
+  padding: 0;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.erp-btn-link:hover {
+  text-decoration: underline;
+}
+
+
+/* --- Forms --- */
+.erp-input,
+.erp-select {
+  width: 100%;
+  min-height: 48px;
+  /* Comfortable touch target */
+  padding: 0.75rem 1rem;
+  /* 12px 16px */
+  background-color: white;
+  border: 1px solid var(--erp-border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 1rem;
+  /* Readable font size */
+  letter-spacing: 0.01em;
+  color: var(--erp-text-main);
+  transition: all 0.2s;
+  line-height: 1.5;
+}
+
+.erp-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--erp-text-label);
+  /* Updated variable */
+  margin-bottom: 0.625rem;
+  /* ~10px spacing */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  /* Capital labels spacing */
+}
+
+.erp-input:focus,
+.erp-select:focus {
+  border-color: var(--erp-primary);
+  box-shadow: 0 0 0 3px var(--erp-primary-ring);
+  /* Soft glow */
+  background-color: white;
+  outline: none;
+}
+
+.erp-input::placeholder {
+  color: var(--erp-text-tertiary);
+}
+
+/* --- Tables (Enterprise Standard) --- */
+.erp-table-container {
+  border: 1px solid var(--erp-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.erp-table {
+  width: 100%;
+  border-collapse: separate;
+  /* Allows polished borders */
+  border-spacing: 0;
+  text-align: left;
+}
+
+.erp-table th {
+  background-color: #F1F5F9;
+  padding: 1rem 1.5rem;
+  /* Spacious headers */
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--erp-text-header);
+  border-bottom: 1px solid var(--erp-border);
+  letter-spacing: 0.06em;
+  /* Increased spacing for caps */
+  white-space: nowrap;
+}
+
+.erp-table td {
+  padding: 1rem 1.5rem;
+  /* 16px 24px Comfort Padding */
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--erp-text-main);
+  border-bottom: 1px solid var(--erp-divider);
+  transition: background-color 0.1s;
+  height: 56px;
+  /* Explicit row height for consistency */
+}
+
+.erp-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Row Hover & Zebra Striping */
+.erp-table tbody tr:nth-child(even) td {
+  background-color: #fafbfd;
+  /* Very subtle zebra stripe */
+}
+
+.erp-table tbody tr:hover td {
+  background-color: #f1f5f9;
+  /* Darker hover state */
+}
+
+/* Sticky Headers Support */
+.erp-table th.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* --- Badges --- */
+.erp-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.erp-badge-primary {
+  background-color: var(--erp-primary-subtle);
+  color: var(--erp-primary);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.erp-badge-success {
+  background-color: var(--erp-success-bg);
+  color: var(--erp-success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.erp-badge-warning {
+  background-color: var(--erp-warning-bg);
+  color: var(--erp-warning);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.erp-badge-danger {
+  background-color: var(--erp-error-bg);
+  color: var(--erp-error);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.erp-badge-neutral {
+  background-color: var(--erp-bg-surface);
+  color: var(--erp-text-secondary);
+  border: 1px solid var(--erp-border);
+}
+
+/* Empty State */
+.erp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--erp-text-secondary);
+  background: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 10px,
+      #fafbfd 10px,
+      #fafbfd 20px);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--erp-border);
+}
+
+.erp-empty-icon {
+  margin-bottom: 1rem;
+  color: var(--erp-text-tertiary);
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+
+/* --- Utilities --- */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Helper for sticky columns in DataEntry */
+.sticky-col {
+  position: sticky;
+  background-color: white;
+  z-index: 5;
+}
+
+.col-sticky-1 {
+  left: 0;
+  z-index: 20;
+  width: 160px;
+  /* Fixed width for Print column */
+}
+
+.col-sticky-2 {
+  left: 160px;
+  /* Width of first column */
+  z-index: 20;
+  width: 160px;
+  /* Fixed width for Style column */
+}
+
+.sticky-col::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--erp-border);
+}
+
+/* --- Sidebar Navigation --- */
+.erp-nav-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  border-radius: var(--radius-md);
+  color: #94A3B8;
+  /* Slate-400 */
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.erp-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: white;
+  transform: translateX(4px);
+}
+
+.erp-nav-item.active {
+  background: var(--erp-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  font-weight: 600;
+}
+
+.erp-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: white;
+  opacity: 0.3;
+}
+
+.erp-nav-item-logout {
+  color: #F87171;
+  /* Red-400 */
+}
+
+
+/* --- Specific Component Overrides for Redesign --- */
+
+/* Active Cell Highlight */
+.erp-table td input:focus {
+  background-color: var(--erp-primary-subtle);
+}
+
+/* Numeric Fields Bolder */
+input[type="number"],
+.cell-input {
+  font-weight: 500;
+}
+
+/* Section Title Style */
+.erp-section-title {
+  color: var(--erp-text-section);
+  font-weight: 600;
+  border-bottom: 1px solid var(--erp-divider);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
