@@ -119,62 +119,63 @@ const AdminDashboard = () => {
         if (cartons.length === 0) return alert('No data to export');
 
         const wb = XLSX.utils.book_new();
-        const sheets = JSON.parse(localStorage.getItem('sheets') || '[]');
+        // Sort cartons by Carton No (numeric) to ensure order makes sense
+        const sortedCartons = [...cartons].sort((a, b) => (parseInt(a.cartonNo) || 0) - (parseInt(b.cartonNo) || 0));
+        const totalCartons = sortedCartons.length;
 
-        // Helper to format data rows
-        const formatCartons = (list) => list.map(c => ({
-            "Carton No": c.cartonNo,
-            "Buyer": c.buyer,
-            "Store": c.storeName,
-            "Season": c.season,
-            "Total Pcs": c.totalPieces,
-            "Net Wt": c.netWeight,
-            "Gross Wt": c.grossWeight,
-            "Timestamp": new Date(c.timestamp).toLocaleString()
-        }));
+        // Constants for Table Headers (match DataEntry)
+        const NUMERIC_SIZES = [45, 47, 68, 74, 80, 86, 92, 98, 104, 110, 116, 122, 128, 134, 140];
+        const ALPHA_SIZES = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'XXXXL'];
+        const ALL_SIZES = [...NUMERIC_SIZES, ...ALPHA_SIZES];
 
-        // Group cartons by sheetId
-        const groups = {};
-        cartons.forEach(c => {
-            const sId = c.sheetId || 'legacy';
-            if (!groups[sId]) groups[sId] = [];
-            groups[sId].push(c);
+        sortedCartons.forEach((carton, index) => {
+            // 1. Top Section (Vertical Label Format)
+            const topSection = [
+                ["CARTON No.", `: ${index + 1} OF ${totalCartons}`],
+                ["SEASON", `: ${carton.season || ''}`],
+                ["STORE NAME", `: ${carton.storeName || ''}`],
+                ["COLOUR", `: ALL COLOURS`], // Hardcoded as per request
+                ["STYLE", `: ${carton.uniqueStyles && carton.uniqueStyles.length === 1 ? carton.uniqueStyles[0] : 'ALL STYLES'}`],
+                ["TOTAL PCS", `: ${carton.totalPieces || 0}`],
+                ["NET WEIGHT", `: ${carton.netWeight || '-'} KG`],
+                ["GROSS WEIGHT", `: ${carton.grossWeight || '-'} KG`],
+                ["CARTON DIMENSION", `: ${carton.cartonDimension || '-'}`],
+                ["MADE IN INDIA", ""],
+                [] // Empty row for spacing
+            ];
+
+            // 2. Table Section (Item Details)
+            const tableHeaders = ["Print", "Style", ...ALL_SIZES, "Total"];
+
+            const tableRows = (carton.rows || []).map(row => {
+                const qtyValues = ALL_SIZES.map(size => row.quantities[size] || "");
+                const rowTotal = ALL_SIZES.reduce((sum, size) => sum + (parseInt(row.quantities[size]) || 0), 0);
+                return [row.print, row.style, ...qtyValues, rowTotal];
+            });
+
+            // Combine all data
+            const wsData = [...topSection, tableHeaders, ...tableRows];
+
+            // Create Worksheet
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+            // Set Column Widths (Approximate visual layout)
+            const wscols = [
+                { wch: 20 }, // A: Labels / Print
+                { wch: 25 }, // B: Values / Style
+            ];
+            // Sizes columns (Compact)
+            ALL_SIZES.forEach(() => wscols.push({ wch: 4 }));
+            wscols.push({ wch: 8 }); // Total Column
+
+            ws['!cols'] = wscols;
+
+            // Add Sheet to Workbook
+            // Sheet Name: Carton_1, Carton_2, etc.
+            XLSX.utils.book_append_sheet(wb, ws, `Carton_${index + 1}`);
         });
 
-        let sheetAdded = false;
-
-        // 1. Add known sheets in order
-        sheets.forEach(sheet => {
-            if (groups[sheet.id] && groups[sheet.id].length > 0) {
-                const ws = XLSX.utils.json_to_sheet(formatCartons(groups[sheet.id]));
-                XLSX.utils.book_append_sheet(wb, ws, sheet.name);
-                delete groups[sheet.id];
-                sheetAdded = true;
-            }
-        });
-
-        // 2. Add legacy data
-        if (groups['legacy']) {
-            const ws = XLSX.utils.json_to_sheet(formatCartons(groups['legacy']));
-            XLSX.utils.book_append_sheet(wb, ws, "Overview");
-            delete groups['legacy'];
-            sheetAdded = true;
-        }
-
-        // 3. Add any orphaned groups (unsaved sheets?)
-        Object.keys(groups).forEach(sId => {
-            const ws = XLSX.utils.json_to_sheet(formatCartons(groups[sId]));
-            XLSX.utils.book_append_sheet(wb, ws, `Sheet ${sId.substring(6, 10)}`);
-            sheetAdded = true;
-        });
-
-        // Fallback if no sheets matched but data exists (should be covered by legacy, but just in case)
-        if (!sheetAdded) {
-            const ws = XLSX.utils.json_to_sheet(formatCartons(cartons));
-            XLSX.utils.book_append_sheet(wb, ws, "Master Overview");
-        }
-
-        const fileName = `Master_Export_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        const fileName = `Carton_Export_${new Date().toISOString().slice(0, 10)}.xlsx`;
         const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         saveAs(new Blob([wbout], { type: 'application/octet-stream' }), fileName);
     };
